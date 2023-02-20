@@ -1,0 +1,84 @@
+﻿@page "/roomslist"
+@using HotelManagement.Server.Models
+
+<PageTitle>Rooms List</PageTitle>
+
+<div class="container bg-light border p-2">
+    <h1 class="text-info">لیست اتاق ها</h1>
+    <table class="table table-bordered table-responsive">
+        <tr>
+            <th>نام اتاق</th>
+            <th>قمیت</th>
+            @for (var i = 0; i < _maximumNumberOfProps; i++)
+            {
+                @if (i == 0)
+                {
+                    <th>ویژگی ها</th>
+                }
+                <th></th>
+            }
+        </tr>
+        @foreach (var blazorRoom in BlazorRoomsList)
+        {
+            <tr>
+                <td>
+                    <input type="text" @bind-value="blazorRoom.RoomName" @bind-value:event="oninput" />
+                </td>
+                <td>
+                    <input type="number" @bind-value="blazorRoom.Price" @bind-value:event="oninput" />
+                </td>
+                @foreach (var roomProp in blazorRoom.RoomProps!)
+                {
+                    <td>
+                        @roomProp.Name - @roomProp.Value
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+    <br />
+    @foreach (var blazorRoom in BlazorRoomsList)
+    {
+        <span><span>@blazorRoom.RoomName</span>'s Price is @blazorRoom.Price</span>
+
+        <br />
+    }
+</div>
+
+@code
+{
+    int _maximumNumberOfProps;
+
+    public readonly List<BlazorRoom> BlazorRoomsList = new();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        BlazorRoomsList.Add(
+            new BlazorRoom
+            {
+                Id = 342,
+                IsActive = true,
+                RoomName = "Villa Suite One Bed Room",
+                Price = 399,
+                RoomProps = new List<BlazorRoomProp>
+                {
+                    new() { Id = 1, Name = "Sq Ft", Value = "100" },
+                    new() { Id = 2, Name = "Occupancy", Value = "3" }
+                }
+            });
+        BlazorRoomsList.Add(
+            new BlazorRoom
+            {
+                Id = 354,
+                IsActive = true,
+                RoomName = "Villa Suite Two Bed Room",
+                Price = 499,
+                RoomProps = new List<BlazorRoomProp>
+                {
+                    new() { Id = 1, Name = "Sq Ft", Value = "150" }
+                }
+            });
+        _maximumNumberOfProps = BlazorRoomsList.Max(a => a.RoomProps?.Count) ?? 0;
+    }
+}
