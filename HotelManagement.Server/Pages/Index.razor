@@ -1,9 +1,28 @@
 ﻿@page "/"
+@using HotelManagement.Server.Models
 
-<PageTitle>Index</PageTitle>
+@*<PageTitle>Index</PageTitle>
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+*@
+<h2 class="bg-light border p-2">
+    First Room
+</h2>
+Room: @_blazorRoom.RoomName <br/>
+Price: @_blazorRoom.Price <br/>
+
+
+@code
+{
+    private readonly BlazorRoom _blazorRoom = new()
+    {
+        Id = 1,
+        IsActive = true,
+        RoomName = "Villa Suite",
+        Price = 50000
+    };
+}
