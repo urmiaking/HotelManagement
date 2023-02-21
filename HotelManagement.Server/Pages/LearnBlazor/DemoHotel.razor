@@ -1,0 +1,91 @@
+﻿@page "/demohotel"
+@using HotelManagement.Server.Models;
+<PageTitle>Demo Hotel</PageTitle>
+
+<h3>هتل ها</h3>
+
+<div class="bg-light border p-2">
+    <h1 class="text-info">لیست اتاق ها</h1>
+
+    <div class="col-md-12">
+        <div class="row">
+            @foreach (var room in _blazorRooms)
+            {
+                <div class="col-md-2">
+                    <div class="bg-info border p-2">
+                        <h2>Room - @room.Id</h2><br />
+                        <span>@room.RoomName</span><br />
+                        <span>$@room.Price</span><br />
+                        <input type="checkbox" checked="@room.IsActive" @bind-value="room.IsActive" /> @(room.IsActive ? "فعال" : "غیرفعال")<br />
+                        @if (room.IsActive)
+                        {
+                            @if (room.RoomProps != null)
+                            {
+                                foreach (var roomProp in room.RoomProps)
+                                {
+                                    <span>@roomProp.Name - @roomProp.Value</span>
+
+                                    <br />
+                                }
+                            }
+                        }
+                        <div class="p-2">
+                            <button class="btn btn-danger">Delete</button>
+                            <button class="btn btn-info">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private readonly List<BlazorRoom> _blazorRooms = new()
+    {
+        new BlazorRoom
+        {
+            RoomName = "سوئیت پادشاه",
+            Id = 101,
+            Price = 499,
+            IsActive = true,
+            RoomProps = new List<BlazorRoomProp>
+            {
+                new BlazorRoomProp
+                {
+                    Name = "Sq Ft",
+                    Value = "100",
+                    Id = 1
+                },
+                new BlazorRoomProp
+                {
+                    Name = "Occupancy",
+                    Value = "6",
+                    Id = 2
+                }
+            }
+        },
+        new BlazorRoom
+        {
+            RoomName = "سوئیت ملکه",
+            Id = 102,
+            Price = 399,
+            IsActive = true,
+            RoomProps = new List<BlazorRoomProp>
+            {
+                new BlazorRoomProp
+                {
+                    Name = "Sq Ft",
+                    Value = "75",
+                    Id = 1
+                },
+                new BlazorRoomProp
+                {
+                    Name = "Occupancy",
+                    Value = "4",
+                    Id = 2
+                }
+            }
+        }
+    };
+}
