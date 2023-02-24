@@ -2,12 +2,11 @@
 @using HotelManagement.Server.Models;
 <PageTitle>Demo Hotel</PageTitle>
 
-<h3>هتل ها</h3>
 
-<div class="bg-light border p-2">
+<div class="bg-light border p-2 mt-2">
     <h1 class="text-info">لیست اتاق ها</h1>
 
-    <div class="col-md-12">
+    <div class="row container">
         <div class="row">
             @foreach (var room in _blazorRooms)
             {
@@ -24,7 +23,7 @@
                                 foreach (var roomProp in room.RoomProps)
                                 {
                                     <span>@roomProp.Name - @roomProp.Value</span>
-
+                                    
                                     <br />
                                 }
                             }
@@ -41,51 +40,58 @@
 </div>
 
 @code {
-    private readonly List<BlazorRoom> _blazorRooms = new()
+    private List<BlazorRoom> _blazorRooms = new List<BlazorRoom>();
+
+    protected override void OnInitialized()
     {
-        new BlazorRoom
+        base.OnInitialized();
+
+        _blazorRooms.AddRange(new List<BlazorRoom>
         {
-            RoomName = "سوئیت پادشاه",
-            Id = 101,
-            Price = 499,
-            IsActive = true,
-            RoomProps = new List<BlazorRoomProp>
+            new BlazorRoom
             {
-                new BlazorRoomProp
+                RoomName = "سوئیت پادشاه",
+                Id = 101,
+                Price = 499,
+                IsActive = true,
+                RoomProps = new List<BlazorRoomProp>
                 {
-                    Name = "Sq Ft",
-                    Value = "100",
-                    Id = 1
-                },
-                new BlazorRoomProp
+                    new BlazorRoomProp
+                    {
+                        Name = "Sq Ft",
+                        Value = "100",
+                        Id = 1
+                    },
+                    new BlazorRoomProp
+                    {
+                        Name = "Occupancy",
+                        Value = "6",
+                        Id = 2
+                    }
+                }
+            },
+            new BlazorRoom
+            {
+                RoomName = "سوئیت ملکه",
+                Id = 102,
+                Price = 399,
+                IsActive = true,
+                RoomProps = new List<BlazorRoomProp>
                 {
-                    Name = "Occupancy",
-                    Value = "6",
-                    Id = 2
+                    new BlazorRoomProp
+                    {
+                        Name = "Sq Ft",
+                        Value = "75",
+                        Id = 1
+                    },
+                    new BlazorRoomProp
+                    {
+                        Name = "Occupancy",
+                        Value = "4",
+                        Id = 2
+                    }
                 }
             }
-        },
-        new BlazorRoom
-        {
-            RoomName = "سوئیت ملکه",
-            Id = 102,
-            Price = 399,
-            IsActive = true,
-            RoomProps = new List<BlazorRoomProp>
-            {
-                new BlazorRoomProp
-                {
-                    Name = "Sq Ft",
-                    Value = "75",
-                    Id = 1
-                },
-                new BlazorRoomProp
-                {
-                    Name = "Occupancy",
-                    Value = "4",
-                    Id = 2
-                }
-            }
-        }
-    };
+        });
+    }
 }
