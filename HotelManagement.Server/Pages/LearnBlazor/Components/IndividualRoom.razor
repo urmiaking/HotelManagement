@@ -1,0 +1,27 @@
+﻿<div class="col-md-3 offset-1">
+    <div class="bg-info border p-2">
+        <h2>Room - @Room.Id</h2><br />
+        <span>@Room.RoomName</span><br />
+        <span>@Room.Price.ToString("c")</span><br />
+        <input type="checkbox" checked="@Room.IsActive" @bind-value="Room.IsActive" /> @(Room.IsActive ? "فعال" : "غیرفعال")<br />
+        @if (Room.IsActive)
+        {
+            @if (Room.RoomProps != null)
+            {
+                foreach (var RoomProp in Room.RoomProps)
+                {
+                    <span>@RoomProp.Name - @RoomProp.Value</span>
+                                    
+                    <br />
+                }
+            }
+        }
+        <EditDeleteButton IsAdmin="false"></EditDeleteButton>
+    </div>
+</div>
+
+@code
+{
+    [Parameter]
+    public required BlazorRoom Room { get; set; }
+}

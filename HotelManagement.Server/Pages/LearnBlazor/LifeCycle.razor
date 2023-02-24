@@ -1,0 +1,61 @@
+﻿@page "/lifecycle"
+
+<h3>Life Cycle</h3>
+
+<div class="border"></div>
+<LifeCycleComponent CountValue="@_currentCount"></LifeCycleComponent>
+<br />
+
+<p role="status">Current count: @_currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<br />
+
+@foreach (var eventType in _eventTypes)
+{
+    @eventType
+    <br />
+}
+
+@code {
+    readonly List<string> _eventTypes = new();
+
+    private int _currentCount;
+
+    private void IncrementCount() => _currentCount++;
+
+    protected override void OnInitialized()
+    {
+        _eventTypes.Add("OnInitialized is called");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _eventTypes.Add("OnInitializedAsync is called");
+        await Task.Delay(1000);
+    }
+
+    protected override void OnParametersSet()
+    {
+        _eventTypes.Add("OnParametersSet is called");
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _eventTypes.Add("OnParametersSetAsync is called");
+        await Task.Delay(1000);
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        _currentCount = firstRender ? 111 : 999;
+        _eventTypes.Add($"OnAfterRender is called - first Render = {firstRender}");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        _eventTypes.Add($"OnAfterRenderAsync is called - first Render = {firstRender}");
+        await Task.Delay(1000);
+    }
+
+}

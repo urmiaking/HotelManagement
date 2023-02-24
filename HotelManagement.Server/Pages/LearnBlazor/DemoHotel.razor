@@ -1,46 +1,35 @@
 ﻿@page "/demohotel"
-@using HotelManagement.Server.Models;
-<PageTitle>Demo Hotel</PageTitle>
+@using BlazorAmenities = HotelManagement.Server.Models.BlazorAmenities
 
+<PageTitle>Demo Hotel</PageTitle>
 
 <div class="bg-light border p-2 mt-2">
     <h1 class="text-info">لیست اتاق ها</h1>
 
     <div class="row container">
-        <div class="row">
-            @foreach (var room in _blazorRooms)
-            {
-                <div class="col-md-2">
-                    <div class="bg-info border p-2">
-                        <h2>Room - @room.Id</h2><br />
-                        <span>@room.RoomName</span><br />
-                        <span>$@room.Price</span><br />
-                        <input type="checkbox" checked="@room.IsActive" @bind-value="room.IsActive" /> @(room.IsActive ? "فعال" : "غیرفعال")<br />
-                        @if (room.IsActive)
-                        {
-                            @if (room.RoomProps != null)
-                            {
-                                foreach (var roomProp in room.RoomProps)
-                                {
-                                    <span>@roomProp.Name - @roomProp.Value</span>
-                                    
-                                    <br />
-                                }
-                            }
-                        }
-                        <div class="p-2">
-                            <button class="btn btn-danger">Delete</button>
-                            <button class="btn btn-info">Edit</button>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
+
+        @foreach (var room in _blazorRooms)
+        {
+            <IndividualRoom Room="room"></IndividualRoom>
+        }
+
+    </div>
+
+    <h1 class="text-info">امکانات</h1>
+
+    <div class="row container">
+
+        @foreach (var amenity in _amenitiesList)
+        {
+            <IndividualAmenity Amenity="amenity"></IndividualAmenity>
+        }
+
     </div>
 </div>
 
 @code {
-    private List<BlazorRoom> _blazorRooms = new List<BlazorRoom>();
+    private readonly List<BlazorRoom> _blazorRooms = new();
+    private readonly List<BlazorAmenities> _amenitiesList = new();
 
     protected override void OnInitialized()
     {
@@ -48,7 +37,7 @@
 
         _blazorRooms.AddRange(new List<BlazorRoom>
         {
-            new BlazorRoom
+            new()
             {
                 RoomName = "سوئیت پادشاه",
                 Id = 101,
@@ -56,13 +45,13 @@
                 IsActive = true,
                 RoomProps = new List<BlazorRoomProp>
                 {
-                    new BlazorRoomProp
+                    new()
                     {
                         Name = "Sq Ft",
                         Value = "100",
                         Id = 1
                     },
-                    new BlazorRoomProp
+                    new()
                     {
                         Name = "Occupancy",
                         Value = "6",
@@ -70,7 +59,7 @@
                     }
                 }
             },
-            new BlazorRoom
+            new()
             {
                 RoomName = "سوئیت ملکه",
                 Id = 102,
@@ -78,19 +67,41 @@
                 IsActive = true,
                 RoomProps = new List<BlazorRoomProp>
                 {
-                    new BlazorRoomProp
+                    new()
                     {
                         Name = "Sq Ft",
                         Value = "75",
                         Id = 1
                     },
-                    new BlazorRoomProp
+                    new()
                     {
                         Name = "Occupancy",
                         Value = "4",
                         Id = 2
                     }
                 }
+            }
+        });
+
+        _amenitiesList.AddRange(new List<BlazorAmenities>
+        {
+            new()
+            {
+                Id = 111,
+                Name = "باشگاه",
+                Description = "باشگاه 7 روز هفته در 24 ساعت شبانه روز دایر است"
+            },
+            new()
+            {
+                Id = 222,
+                Name = "استخر",
+                Description = "استخر از 8 صبح تا 10 شب دایر است"
+            },
+            new()
+            {
+                Id = 333,
+                Name = "صبحانه رایگان",
+                Description = "از صبحانه رایگان در بیرون هتل لذت ببرید"
             }
         });
     }

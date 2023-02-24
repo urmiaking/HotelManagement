@@ -1,0 +1,14 @@
+﻿<div class="col-md-3 offset-1">
+    <div class="bg-info border p-2">
+        <h2>امکانات - @Amenity.Id</h2><br />
+        <span>@Amenity.Name</span><br />
+        <span>@Amenity.Description</span><br />
+        
+    </div>
+</div>
+
+@code
+{
+    [Parameter]
+    public required BlazorAmenities Amenity { get; set; }
+}
