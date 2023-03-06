@@ -5,12 +5,12 @@
 
 <div class="bg-light border p-2 mt-2">
     <h1 class="text-info">لیست اتاق ها</h1>
-
+    <span>تعداد اتاق های انتخاب شده - @SelectedRooms</span>
     <div class="row container">
 
         @foreach (var room in _blazorRooms)
         {
-            <IndividualRoom Room="room"></IndividualRoom>
+            <IndividualRoom OnRoomCheckboxSelection="RoomSelectionCounterChanged" Room="room"></IndividualRoom>
         }
 
     </div>
@@ -28,6 +28,9 @@
 </div>
 
 @code {
+
+    public int SelectedRooms { get; set; } = 0;
+
     private readonly List<BlazorRoom> _blazorRooms = new();
     private readonly List<BlazorAmenities> _amenitiesList = new();
 
@@ -104,5 +107,17 @@
                 Description = "از صبحانه رایگان در بیرون هتل لذت ببرید"
             }
         });
+    }
+
+    protected void RoomSelectionCounterChanged(bool isRoomSelected)
+    {
+        if (isRoomSelected)
+        {
+            SelectedRooms++;
+        }
+        else
+        {
+            SelectedRooms--;
+        }
     }
 }

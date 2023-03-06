@@ -10,6 +10,9 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 <br />
+@Count <br/>
+<button class="btn btn-primary" @onclick="StartCountDown">Start Countdown</button>
+<br />
 
 @foreach (var eventType in _eventTypes)
 {
@@ -21,6 +24,8 @@
     readonly List<string> _eventTypes = new();
 
     private int _currentCount;
+
+    private int Count { get; set; } = 5;
 
     private void IncrementCount() => _currentCount++;
 
@@ -58,4 +63,23 @@
         await Task.Delay(1000);
     }
 
+    protected override bool ShouldRender()
+    {
+        _eventTypes.Add("ShouldRender is called");
+        return true;
+    }
+
+    void StartCountDown()
+    {
+        var timer = new Timer(TimerCallBack, null, 1000, 1000);
+    }
+
+    void TimerCallBack(object? state)
+    {
+        if (Count > 0)
+        {
+            Count--;
+            InvokeAsync(StateHasChanged);
+        }
+    }
 }
