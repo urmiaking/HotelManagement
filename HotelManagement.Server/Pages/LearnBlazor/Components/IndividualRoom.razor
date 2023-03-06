@@ -1,7 +1,7 @@
 ﻿<div class="col-md-3 offset-1">
     <div class="bg-info border p-2">
         <h2>Room - @Room.Id</h2><br />
-        <input type="checkbox" @onchange="RoomCheckboxSelectionChanged"/>
+        <input type="checkbox" @onchange="RoomCheckboxSelectionChanged" />
         <span>@Room.RoomName</span><br />
         <span>@Room.Price.ToString("c")</span><br />
         <input type="checkbox" checked="@Room.IsActive" @bind-value="Room.IsActive" /> @(Room.IsActive ? "فعال" : "غیرفعال")<br />
@@ -12,7 +12,7 @@
                 foreach (var roomProp in Room.RoomProps)
                 {
                     <span>@roomProp.Name - @roomProp.Value</span>
-                                    
+
                     <br />
                 }
             }
@@ -29,7 +29,7 @@
     [Parameter]
     public EventCallback<bool> OnRoomCheckboxSelection { get; set; }
 
-    protected  async Task RoomCheckboxSelectionChanged(ChangeEventArgs e)
+    protected async Task RoomCheckboxSelectionChanged(ChangeEventArgs e)
     {
         await OnRoomCheckboxSelection.InvokeAsync((bool)e.Value!);
     }

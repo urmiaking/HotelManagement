@@ -21,15 +21,19 @@
 
         @foreach (var amenity in _amenitiesList)
         {
-            <IndividualAmenity Amenity="amenity"></IndividualAmenity>
+            <IndividualAmenity OnAmenityClicked="AmenitySelectionChanged" Amenity="amenity"></IndividualAmenity>
         }
 
+    </div>
+    <div class="row col-12">
+        <label>امکانات انتخاب شده : @SelectedAmenity</label>
     </div>
 </div>
 
 @code {
 
-    public int SelectedRooms { get; set; } = 0;
+    public int SelectedRooms { get; set; }
+    public string? SelectedAmenity { get; set; }  
 
     private readonly List<BlazorRoom> _blazorRooms = new();
     private readonly List<BlazorAmenities> _amenitiesList = new();
@@ -119,5 +123,10 @@
         {
             SelectedRooms--;
         }
+    }
+
+    protected void AmenitySelectionChanged(string amenityName)
+    {
+        SelectedAmenity = amenityName;
     }
 }

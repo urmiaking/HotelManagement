@@ -1,5 +1,5 @@
 ﻿<div class="col-md-3 offset-1">
-    <div class="bg-info border p-2">
+    <div class="bg-info border p-2" @onclick="args => AmenityClicked(args, Amenity.Name)">
         <h2>امکانات - @Amenity.Id</h2><br />
         <span>@Amenity.Name</span><br />
         <span>@Amenity.Description</span><br />
@@ -11,4 +11,12 @@
 {
     [Parameter]
     public required BlazorAmenities Amenity { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnAmenityClicked { get; set; }
+
+    private async Task AmenityClicked(MouseEventArgs e, string name)
+    {
+        await OnAmenityClicked.InvokeAsync(name);
+    }
 }
