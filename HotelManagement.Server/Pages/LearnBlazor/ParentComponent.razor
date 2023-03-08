@@ -2,21 +2,28 @@
 
 <h1 class="text-danger">Parent Child Component</h1>
 
-<ChildComponent OnClickBtnMethod="ShowMessage" Title="This title is passed as parameter from Parent Component">
-    <ChildContent>Render Fragment from parent!</ChildContent>
-    <DangerChildContent>Render Fragment from parent!</DangerChildContent>
-</ChildComponent>
+<CascadingValue Value="MessageForGrandChild" Name="MessageFromGrandParent">
+    <CascadingValue Value="LuckyNumber" Name="GrandParentsLuckyNumber">
+    <ChildComponent OnClickBtnMethod="ShowMessage" Title="This title is passed as parameter from Parent Component">
+        <ChildContent>Render Fragment from parent!</ChildContent>
+        <DangerChildContent>Render Fragment from parent!</DangerChildContent>
+        </ChildComponent>
+    </CascadingValue>
+</CascadingValue>
+
 
 <AnotherChildComponent placeholder="Enter text from parent" maxlength="5"></AnotherChildComponent>
 
-<p><b>@messageText</b></p>
+<p><b>@_messageText</b></p>
 
 @code
 {
-    private string messageText = "";
+    private const string MessageForGrandChild = "This is a message from grand parent";
+    public string LuckyNumber { get; set; } = "7";
+    private string _messageText = "";
 
     private void ShowMessage(MouseEventArgs e)
     {
-        messageText = "Blazzing text from parent";
+        _messageText = "Blazzing text from parent";
     }
 }
