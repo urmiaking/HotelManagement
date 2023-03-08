@@ -1,5 +1,4 @@
 ﻿@page "/demohotel"
-@using BlazorAmenities = HotelManagement.Server.Models.BlazorAmenities
 
 <PageTitle>Demo Hotel</PageTitle>
 
@@ -21,7 +20,10 @@
 
         @foreach (var amenity in _amenitiesList)
         {
-            <IndividualAmenity OnAmenityClicked="AmenitySelectionChanged" Amenity="amenity"></IndividualAmenity>
+            <IndividualAmenity OnAmenityClicked="AmenitySelectionChanged" Amenity="amenity">
+                <FirstAmenityContent>#1</FirstAmenityContent>
+                <SecondAmenityContent>#2</SecondAmenityContent>
+            </IndividualAmenity>
         }
 
     </div>
