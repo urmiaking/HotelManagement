@@ -1,0 +1,13 @@
+﻿using HotelManagement.DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace HotelManagement.DataAccess.Data;
+
+public class ApplicationDbContext : DbContext
+{
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    { }
+
+    public required DbSet<HotelRoom> HotelRooms { get; set; }
+}
+
