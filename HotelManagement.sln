@@ -7,13 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelManagement.Server", "H
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelManagement.Client", "HotelManagement.Client\HotelManagement.Client.csproj", "{4C4FFF61-0A85-45A4-86AD-C6498DA0C53B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelManagement.DataAccess", "HotelManagement.DataAccess\HotelManagement.DataAccess.csproj", "{0BCD33B7-DF33-43A7-AE6E-563DF1C0B522}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelManagement.DataAccess", "HotelManagement.DataAccess\HotelManagement.DataAccess.csproj", "{0BCD33B7-DF33-43A7-AE6E-563DF1C0B522}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelManagement.Common", "HotelManagement.Common\HotelManagement.Common.csproj", "{1A0AEFAB-1F30-478C-A51E-4AB02B3A6B2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelManagement.Common", "HotelManagement.Common\HotelManagement.Common.csproj", "{1A0AEFAB-1F30-478C-A51E-4AB02B3A6B2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelManagement.Business", "HotelManagement.Business\HotelManagement.Business.csproj", "{311C36E2-8DED-46DD-9312-46E526888368}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelManagement.Business", "HotelManagement.Business\HotelManagement.Business.csproj", "{311C36E2-8DED-46DD-9312-46E526888368}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelManagement.Models", "HotelManagement.Models\HotelManagement.Models.csproj", "{4E6AFE88-4E08-4D2C-97DB-6ED64B60625E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelManagement.Models", "HotelManagement.Models\HotelManagement.Models.csproj", "{4E6AFE88-4E08-4D2C-97DB-6ED64B60625E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
