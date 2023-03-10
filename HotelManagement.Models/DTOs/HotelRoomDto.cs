@@ -8,7 +8,7 @@ public class HotelRoomDto
 
     [Display(Name = "عنوان اتاق")]
     [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-    public required string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     [Display(Name = "ظرفیت")]
     [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
@@ -22,6 +22,6 @@ public class HotelRoomDto
     [Display(Name = "جزئیات")]
     public string Details { get; set; } = default!;
 
-    [Display(Name = "ژیربنا")]
+    [Display(Name = "زیربنا")]
     public string SqFt { get; set; } = default!;
 }

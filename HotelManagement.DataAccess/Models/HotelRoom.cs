@@ -12,10 +12,10 @@ public class HotelRoom
     public int Occupancy { get; set; }
     [Required]
     public double RegularRate { get; set; }
-    public string Details { get; set; } = default!;
-    public string SqFt { get; set; } = default!;
-    public string CreatedBy { get; set; } = default!;
+    public string? Details { get; set; }
+    public string? SqFt { get; set; }
+    public string? CreatedBy { get; set; }
     public DateTime CreateDate { get; set; } = DateTime.Now;
-    public string UpdatedBy { get; set; } = default!;
+    public string? UpdatedBy { get; set; }
     public DateTime UpdateDate { get; set; }
 }

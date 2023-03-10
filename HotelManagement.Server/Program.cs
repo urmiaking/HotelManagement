@@ -1,3 +1,5 @@
+using HotelManagement.Business.Repositories.Implementations;
+using HotelManagement.Business.Repositories.Interfaces;
 using HotelManagement.DataAccess.Data;
 using HotelManagement.Server.Data;
 
@@ -8,7 +10,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddSqlServer<ApplicationDbContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
-builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<IHotelRoomRepository, HotelRoomRepository>();
 
 var app = builder.Build();
 

@@ -100,7 +100,7 @@ public class HotelRoomRepository : IHotelRoomRepository
         }
     }
 
-    public async Task<HotelRoomDto> IsSameNameRoomAlreadyPresent(string name)
+    public async Task<HotelRoomDto> IsRoomUnique(string name)
     {
         try
         {

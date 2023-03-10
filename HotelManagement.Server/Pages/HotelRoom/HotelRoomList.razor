@@ -1,9 +1,61 @@
 ﻿@page "/hotel-room"
 
+@inject IHotelRoomRepository HotelRoomRepository
+
 <div class="row mt-4">
-    <div class="col-8"></div>
-    <h4 class="card-title text-info">Hotel Rooms</h4>
+    <div class="col-7">
+        <h4 class="card-title text-info">لیست اتاق ها</h4>
+    </div>
     <div class="col-3 offset-1">
-        <NavLink href="hotel-room/create" class="btn btn-info form-control">Create Hotel Room</NavLink>
+        <NavLink href="hotel-room/create" class="btn btn-info form-control">افزودن اتاق جدید</NavLink>
     </div>
 </div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>نام اتاق</th>
+                <th>ظرفیت</th>
+                <th>قیمت</th>
+                <th>زیربنا</th>
+                <th>جزییات</th>
+                <th>عملیات</th>
+            </tr>
+            </thead>
+            <tbody>
+                @if (HotelRooms.Any())
+                {
+                    foreach (var hotelRoom in HotelRooms)
+                    {
+                        <tr>
+                            <td>@hotelRoom.Name</td>
+                            <td>@hotelRoom.Occupancy</td>
+                            <td>@hotelRoom.RegularRate</td>
+                            <td>@hotelRoom.SqFt</td>
+                            <td>@hotelRoom.Details</td>
+                            <td></td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">هیچ اتاقی یافت نشد</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code
+{
+    private IEnumerable<HotelRoomDto> HotelRooms { get; set; } = new List<HotelRoomDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        HotelRooms = await HotelRoomRepository.GetAllHotelRooms();
+    }
+}

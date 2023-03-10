@@ -8,8 +8,19 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: "IRANSans";
+    src: url('../font/IRANSANS/eot/IRANSansWeb(FaNum)_Medium.eot?1532072864');
+    src: url('../font/IRANSANS/eot/IRANSansWeb(FaNum)_Medium.eot?&1532072864#iefix') format('embedded-opentype'), 
+         url('../font/IRANSANS/woff2/IRANSansWeb(FaNum)_Medium.woff2?1532072864') format('woff2'), 
+         url('../font/IRANSANS/woff/IRANSansWeb(FaNum)_Medium.woff?1532072864') format('woff'), 
+         url('../font/IRANSANS/ttf/IRANSansWeb(FaNum)_Medium.ttf?1532072864') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 html, body {
-    font-family: 'iran', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'IRANSans', 'iran', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 h1:focus {

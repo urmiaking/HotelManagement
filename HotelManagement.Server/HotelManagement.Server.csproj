@@ -18,4 +18,8 @@
     <ProjectReference Include="..\HotelManagement.Business\HotelManagement.Business.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+
 </Project>
