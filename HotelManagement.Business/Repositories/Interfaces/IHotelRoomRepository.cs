@@ -9,7 +9,7 @@ public interface IHotelRoomRepository
     Task<HotelRoomDto> GetHotelRoom(int roomId);
     Task<int> DeleteHotelRoom(int roomId);
     Task<IEnumerable<HotelRoomDto>> GetAllHotelRooms();
-    Task<HotelRoomDto> IsRoomUnique(string name);
+    Task<HotelRoomDto> IsRoomUnique(string name, int roomId);
 
 
 }

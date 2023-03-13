@@ -35,7 +35,9 @@
                             <td>@hotelRoom.RegularRate</td>
                             <td>@hotelRoom.SqFt</td>
                             <td>@hotelRoom.Details</td>
-                            <td></td>
+                            <td>
+                                <NavLink href="@($"hotel-room/edit/{hotelRoom.Id}")" class="btn btn-info">ویرایش</NavLink>
+                            </td>
                         </tr>
                     }
                 }

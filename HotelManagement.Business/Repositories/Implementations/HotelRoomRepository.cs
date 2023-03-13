@@ -100,14 +100,24 @@ public class HotelRoomRepository : IHotelRoomRepository
         }
     }
 
-    public async Task<HotelRoomDto> IsRoomUnique(string name)
+    public async Task<HotelRoomDto> IsRoomUnique(string name, int roomId = 0)
     {
         try
         {
-            var hotelRoom = await _db.HotelRooms.FirstOrDefaultAsync(a => 
-                string.Equals(a.Name, name, StringComparison.CurrentCultureIgnoreCase));
+            if (roomId == 0)
+            {
+                var hotelRoom = await _db.HotelRooms.FirstOrDefaultAsync(a =>
+                    string.Equals(a.Name, name, StringComparison.CurrentCultureIgnoreCase));
 
-            return _mapper.Map<HotelRoom, HotelRoomDto>(hotelRoom!);
+                return _mapper.Map<HotelRoom, HotelRoomDto>(hotelRoom!);
+            }
+            else
+            {
+                var hotelRoom = await _db.HotelRooms.FirstOrDefaultAsync(a =>
+                    string.Equals(a.Name, name, StringComparison.CurrentCultureIgnoreCase) && a.Id != roomId);
+
+                return _mapper.Map<HotelRoom, HotelRoomDto>(hotelRoom!);
+            }
         }
         catch
         {

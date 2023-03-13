@@ -1,10 +1,12 @@
 ﻿@page "/hotel-room/create"
+@page "/hotel-room/edit/{Id:int}"
 
 @inject IHotelRoomRepository HotelRoomRepository
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
 
 <div class="row mt-2 mb-5">
-    <h3 class="card-title text-info m-3">@Title اتاق جدید</h3>
+    <h3 class="card-title text-info m-3">@Title اتاق</h3>
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
@@ -46,22 +48,61 @@
 
 @code
 {
-    private HotelRoomDto HotelRoomModel { get; } = new ();
+    [Parameter]
+    public int? Id { get; set; }
+
+    private HotelRoomDto HotelRoomModel { get; set; } = new ();
 
     private string Title { get; set; } = "افزودن";
 
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id is not null)
+        {
+            // Update
+            Title = "ویرایش";
+            HotelRoomModel = await HotelRoomRepository.GetHotelRoom(Id.Value);
+        }
+        else
+        {
+            // Create
+            HotelRoomModel = new HotelRoomDto();
+        }
+    }
+
     private async Task HandleHotelRoomUpsert()
     {
-        var roomDetailsByName = await HotelRoomRepository.IsRoomUnique(HotelRoomModel.Name);
-
-        if (roomDetailsByName is not null)
+        try
         {
-            // there is duplicate room show error
-            return;
+            var roomDetailsByName = await HotelRoomRepository.IsRoomUnique(HotelRoomModel.Name, HotelRoomModel.Id);
+
+            if (roomDetailsByName is not null)
+            {
+                await JsRuntime.ToastrError("اتاقی با این نام از قبل وجود دارد!");
+                return;
+            }
+
+            if (HotelRoomModel.Id != 0)
+            {
+                // Update
+                var updateRoomResult = await HotelRoomRepository.UpdateHotelRoom(HotelRoomModel.Id, HotelRoomModel);
+                await JsRuntime.ToastrSuccess("اتاق با موفقیت ویرایش شد");
+            }
+            else
+            {
+                // Create
+                var createdResult = await HotelRoomRepository.CreateHotelRoom(HotelRoomModel);
+
+                await JsRuntime.ToastrSuccess("اتاق با موفقیت ایجاد شد");
+            }
+
+            NavigationManager.NavigateTo("/hotel-room");
         }
-
-        var createdResult = await HotelRoomRepository.CreateHotelRoom(HotelRoomModel);
-
-        NavigationManager.NavigateTo("/hotel-room");
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        
     }
 }
