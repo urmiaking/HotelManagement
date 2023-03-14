@@ -4,6 +4,7 @@ namespace HotelManagement.DataAccess.Models;
 
 public class HotelRoom
 {
+
     [Key]
     public int Id { get; set; }
     [Required]
@@ -18,4 +19,6 @@ public class HotelRoom
     public DateTime CreateDate { get; set; } = DateTime.Now;
     public string? UpdatedBy { get; set; }
     public DateTime UpdateDate { get; set; }
+
+    public virtual ICollection<HotelRoomImage> Images { get; set; } = default!;
 }

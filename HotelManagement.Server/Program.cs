@@ -12,6 +12,7 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddSqlServer<ApplicationDbContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IHotelRoomRepository, HotelRoomRepository>();
+builder.Services.AddScoped<IHotelImagesRepository, HotelImageRepository>();
 
 var app = builder.Build();
 

@@ -9,5 +9,6 @@ public class ApplicationDbContext : DbContext
     { }
 
     public required DbSet<HotelRoom> HotelRooms { get; set; }
+    public required DbSet<HotelRoomImage> HotelRoomsImage { get; set; }
 }
 
