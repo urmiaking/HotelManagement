@@ -65,7 +65,9 @@ public class HotelRoomRepository : IHotelRoomRepository
     {
         try
         {
-            var hotelRoom = await _db.HotelRooms.FindAsync(roomId);
+            var hotelRoom = await _db.HotelRooms
+                .Include(a => a.Images)
+                .FirstOrDefaultAsync(a => a.Id == roomId);
 
             return _mapper.Map<HotelRoom, HotelRoomDto>(hotelRoom!);
         }
@@ -92,7 +94,8 @@ public class HotelRoomRepository : IHotelRoomRepository
     {
         try
         {
-            return _mapper.Map<IEnumerable<HotelRoom>, IEnumerable<HotelRoomDto>>(await _db.HotelRooms.ToListAsync());
+            return _mapper.Map<IEnumerable<HotelRoom>, IEnumerable<HotelRoomDto>>(
+                await _db.HotelRooms.Include(a => a.Images).ToListAsync());
         }
         catch
         {

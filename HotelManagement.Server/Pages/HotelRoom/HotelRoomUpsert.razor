@@ -1,9 +1,12 @@
 ﻿@page "/hotel-room/create"
 @page "/hotel-room/edit/{Id:int}"
+@using HotelManagement.Server.Services
 
 @inject IHotelRoomRepository HotelRoomRepository
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JsRuntime
+@inject IFileUploadService FileUploadService
+@inject IHotelImagesRepository HotelImagesRepository
 
 <div class="row mt-2 mb-5">
     <h3 class="card-title text-info m-3">@Title اتاق</h3>
@@ -15,26 +18,49 @@
                     @*<ValidationSummary></ValidationSummary>*@
                     <div class="form-group">
                         <label>عنوان اتاق</label>
-                        <InputText @bind-Value="HotelRoomModel.Name" class="form-control"/>
+                        <InputText @bind-Value="HotelRoomModel.Name" class="form-control" />
                         <ValidationMessage For="() => HotelRoomModel.Name"></ValidationMessage>
                     </div>
                     <div class="form-group">
                         <label>ظرفیت</label>
-                        <InputNumber @bind-Value="HotelRoomModel.Occupancy" class="form-control"/>
+                        <InputNumber @bind-Value="HotelRoomModel.Occupancy" class="form-control" />
                         <ValidationMessage For="() => HotelRoomModel.Occupancy"></ValidationMessage>
                     </div>
                     <div class="form-group">
                         <label>قیمت</label>
-                        <InputNumber @bind-Value="HotelRoomModel.RegularRate" class="form-control"/>
+                        <InputNumber @bind-Value="HotelRoomModel.RegularRate" class="form-control" />
                         <ValidationMessage For="() => HotelRoomModel.RegularRate"></ValidationMessage>
                     </div>
                     <div class="form-group">
                         <label>جزئیات</label>
-                        <InputTextArea @bind-Value="HotelRoomModel.Details" class="form-control"/>
+                        <InputTextArea @bind-Value="HotelRoomModel.Details" class="form-control" />
                     </div>
                     <div class="form-group">
                         <label>زیربنا</label>
-                        <InputText @bind-Value="HotelRoomModel.SqFt" class="form-control"/>
+                        <InputText @bind-Value="HotelRoomModel.SqFt" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>عکس</label>
+                        <InputFile class="form-control" OnChange="HandleImageUpload" multiple />
+                        <div class="row">
+                            @if (HotelRoomModel.ImageUrls is {Count: > 0 })
+                            {
+                                var serial = 1;
+                                foreach (var image in HotelRoomModel.ImageUrls)
+                                {
+                                    <div class="col-md-2 mt-3">
+                                        <div class="room-image" style="background: url('@image') 50% 50%;">
+                                            <span class="room-image-title">@serial</span>
+                                        </div>
+
+                                        <button type="button" class="btn btn-outline-danger mt-4">
+                                            حذف
+                                        </button>
+                                    </div>
+                                    serial++;
+                                }
+                            }
+                        </div>
                     </div>
                     <div class="form-group mt-4">
                         <button class="btn btn-primary">@Title اتاق</button>
@@ -51,7 +77,8 @@
     [Parameter]
     public int? Id { get; set; }
 
-    private HotelRoomDto HotelRoomModel { get; set; } = new ();
+    private HotelRoomDto HotelRoomModel { get; set; } = new();
+    private HotelRoomImageDto RoomImage { get; set; } = new();
 
     private string Title { get; set; } = "افزودن";
 
@@ -62,6 +89,10 @@
             // Update
             Title = "ویرایش";
             HotelRoomModel = await HotelRoomRepository.GetHotelRoom(Id.Value);
+            if (HotelRoomModel.Images is {Count: > 0 })
+            {
+                HotelRoomModel.ImageUrls = HotelRoomModel.Images.Select(a => a.RoomImageUrl).ToList();
+            }
         }
         else
         {
@@ -92,7 +123,7 @@
             {
                 // Create
                 var createdResult = await HotelRoomRepository.CreateHotelRoom(HotelRoomModel);
-
+                await AddHotelRoomImage(createdResult);
                 await JsRuntime.ToastrSuccess("اتاق با موفقیت ایجاد شد");
             }
 
@@ -103,6 +134,72 @@
             Console.WriteLine(e);
             throw;
         }
-        
+
+    }
+
+    private async Task AddHotelRoomImage(HotelRoomDto roomDetails)
+    {
+        foreach (var imageUrl in HotelRoomModel.ImageUrls)
+        {
+            RoomImage = new HotelRoomImageDto
+            {
+                RoomId = roomDetails.Id,
+                RoomImageUrl = imageUrl
+            };
+
+            await HotelImagesRepository.CreateHotelRoomImage(RoomImage);
+        }
+    }
+
+    private async Task HandleImageUpload(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            var images = new List<string>();
+
+            if (e.GetMultipleFiles().Count > 0)
+            {
+                foreach (var file in e.GetMultipleFiles())
+                {
+                    var fileInfo = new FileInfo(file.Name);
+
+                    if (fileInfo.Extension.ToLower() == ".jpg" ||
+                        fileInfo.Extension.ToLower() == ".jpeg" ||
+                        fileInfo.Extension.ToLower() == ".png")
+                    {
+                        var uploadedImagePath = await FileUploadService.UploadFileAsync(file);
+                        images.Add(uploadedImagePath);
+                    }
+                    else
+                    {
+                        await JsRuntime.ToastrError("فرمت عکس اشتباه است! لطفا تنها از فرمت های jpg, jpeg و png استفاده کنید.");
+                        return;
+                    }
+                }
+
+                if (images.Any())
+                {
+                    if (HotelRoomModel.ImageUrls != null && HotelRoomModel.ImageUrls.Count > 0)
+                    {
+                        HotelRoomModel.ImageUrls.AddRange(images);
+                    }
+                    else
+                    {
+                        HotelRoomModel.ImageUrls = new List<string>();
+                        HotelRoomModel.ImageUrls.AddRange(images);
+                    }
+                }
+                else
+                {
+                    await JsRuntime.ToastrError("بارگذاری عکس با خطا مواجه شد");
+                }
+
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            throw;
+        }
     }
 }

@@ -2,6 +2,7 @@ using HotelManagement.Business.Repositories.Implementations;
 using HotelManagement.Business.Repositories.Interfaces;
 using HotelManagement.DataAccess.Data;
 using HotelManagement.Server.Data;
+using HotelManagement.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ builder.Services.AddSqlServer<ApplicationDbContext>(builder.Configuration.GetCon
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IHotelRoomRepository, HotelRoomRepository>();
 builder.Services.AddScoped<IHotelImagesRepository, HotelImageRepository>();
+builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
 var app = builder.Build();
 

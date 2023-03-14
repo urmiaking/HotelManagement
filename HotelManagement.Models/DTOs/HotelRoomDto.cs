@@ -24,4 +24,7 @@ public class HotelRoomDto
 
     [Display(Name = "زیربنا")]
     public string SqFt { get; set; } = default!;
+
+    public virtual ICollection<HotelRoomImageDto> Images { get; set; } = default!;
+    public virtual List<string> ImageUrls { get; set; } = default!;
 }
