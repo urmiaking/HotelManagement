@@ -1,6 +1,9 @@
 ﻿@page "/hotel-room"
+@using HotelManagement.Server.Services
 
 @inject IHotelRoomRepository HotelRoomRepository
+@inject IJSRuntime JsRuntime
+@inject IFileUploadService FileService
 
 <div class="row mt-4">
     <div class="col-7">
@@ -37,6 +40,7 @@
                             <td>@hotelRoom.Details</td>
                             <td>
                                 <NavLink href="@($"hotel-room/edit/{hotelRoom.Id}")" class="btn btn-info">ویرایش</NavLink>
+                                <button class="btn btn-danger" @onclick="() => HandleDelete(hotelRoom.Id)">حذف</button>
                             </td>
                         </tr>
                     }
@@ -52,12 +56,41 @@
     </div>
 </div>
 
+<DeleteConfirmation ConfirmationChanged="ConfirmDelete_Click"></DeleteConfirmation>
+
 @code
 {
     private IEnumerable<HotelRoomDto> HotelRooms { get; set; } = new List<HotelRoomDto>();
+    private int? DeleteRoomId { get; set; } = null;
 
     protected override async Task OnInitializedAsync()
     {
         HotelRooms = await HotelRoomRepository.GetAllHotelRooms();
+    }
+
+    public async Task ConfirmDelete_Click(bool isConfirmed)
+    {
+        if (isConfirmed && DeleteRoomId != null)
+        {
+            var hotelRoom = await HotelRoomRepository.GetHotelRoom(DeleteRoomId.Value);
+
+            foreach (var image in hotelRoom.Images)
+            {
+                var imageName = image.RoomImageUrl.Replace($"roomImages/", "");
+                FileService.DeleteFile(imageName);
+            }
+
+            await HotelRoomRepository.DeleteHotelRoom(DeleteRoomId.Value);
+            await JsRuntime.ToastrSuccess("اتاق با موفقیت حذف شد");
+            HotelRooms = await HotelRoomRepository.GetAllHotelRooms();
+        }
+
+        await JsRuntime.InvokeVoidAsync("HideDeleteConfirmationModal");
+    }
+
+    public async Task HandleDelete(int roomId)
+    {
+        DeleteRoomId = roomId;
+        await JsRuntime.InvokeVoidAsync("ShowDeleteConfirmationModal");
     }
 }

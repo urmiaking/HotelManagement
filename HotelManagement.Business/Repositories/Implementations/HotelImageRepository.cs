@@ -4,6 +4,7 @@ using HotelManagement.DataAccess.Data;
 using HotelManagement.DataAccess.Models;
 using HotelManagement.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace HotelManagement.Business.Repositories.Implementations;
 
@@ -57,6 +58,24 @@ public class HotelImageRepository : IHotelImagesRepository
         {
             var images = await _db.HotelRoomsImage.Where(a => a.RoomId == roomId).ToListAsync();
             _db.HotelRoomsImage.RemoveRange(images);
+            return await _db.SaveChangesAsync();
+        }
+        catch
+        {
+            return 0;
+        }
+    }
+
+    public async Task<int> DeleteHotelRoomImageByImageUrl(string imageUrl)
+    {
+        try
+        {
+            var image = await _db.HotelRoomsImage.FirstOrDefaultAsync(a => a.RoomImageUrl == imageUrl);
+
+            if (image == null)
+                return 0;
+
+            _db.HotelRoomsImage.Remove(image);
             return await _db.SaveChangesAsync();
         }
         catch

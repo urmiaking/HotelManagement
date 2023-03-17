@@ -7,5 +7,6 @@ public interface IHotelImagesRepository
     Task<int> CreateHotelRoomImage(HotelRoomImageDto imageDto);
     Task<int> DeleteHotelRoomImageByImageId(int imageId);
     Task<int> DeleteHotelRoomImagesByRoomId(int roomId);
+    Task<int> DeleteHotelRoomImageByImageUrl(string imageUrl);
     Task<IEnumerable<HotelRoomImageDto>> GetHotelRoomImages(int roomId);
 }

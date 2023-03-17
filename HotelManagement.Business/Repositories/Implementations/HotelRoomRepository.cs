@@ -83,6 +83,10 @@ public class HotelRoomRepository : IHotelRoomRepository
 
         if (room is not null)
         {
+            var roomImages = await _db.HotelRoomsImage.Where(a => a.RoomId == roomId).ToListAsync();
+
+            _db.HotelRoomsImage.RemoveRange(roomImages);
+
             _db.HotelRooms.Remove(room);
             return await _db.SaveChangesAsync();
         }

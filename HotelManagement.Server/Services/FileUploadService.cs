@@ -21,16 +21,20 @@ public class FileUploadService : IFileUploadService
             var folderDirectory = $"{_webHostEnvironment.WebRootPath}\\roomImages";
             var path = Path.Combine(_webHostEnvironment.WebRootPath, "roomImages", fileName);
 
-            using var memoryStream = new MemoryStream();
-            await file.OpenReadStream().CopyToAsync(memoryStream);
-
-            if (!Directory.Exists(folderDirectory))
+            using (var memoryStream = new MemoryStream())
             {
-                Directory.CreateDirectory(folderDirectory);
-            }
+                await file.OpenReadStream().CopyToAsync(memoryStream);
 
-            await using var fs = new FileStream(path, FileMode.Create, FileAccess.Write);
-            memoryStream.WriteTo(fs);
+                if (!Directory.Exists(folderDirectory))
+                {
+                    Directory.CreateDirectory(folderDirectory);
+                }
+
+                using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+                {
+                    memoryStream.WriteTo(fs);
+                }
+            }
 
             var fullPath = $"roomImages/{fileName}";
             return fullPath;

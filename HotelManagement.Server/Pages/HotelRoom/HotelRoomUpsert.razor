@@ -43,7 +43,13 @@
                         <label>عکس</label>
                         <InputFile class="form-control" OnChange="HandleImageUpload" multiple />
                         <div class="row">
-                            @if (HotelRoomModel.ImageUrls is {Count: > 0 })
+                            @if (IsImageUploadProcessStarted)
+                            {
+                                <div class="col-md-12">
+                                    <span><i class="fa fa-spin fa-spinner"></i>در حال بارگذاری عکس ها...</span>
+                                </div>
+                            }
+                            @if (HotelRoomModel.ImageUrls is { Count: > 0 })
                             {
                                 var serial = 1;
                                 foreach (var image in HotelRoomModel.ImageUrls)
@@ -79,7 +85,8 @@
 
     private HotelRoomDto HotelRoomModel { get; set; } = new();
     private HotelRoomImageDto RoomImage { get; set; } = new();
-    private List<string> DeleteImageNames { get; set; } = default!;
+    private List<string> DeletedImageNames { get; set; } = default!;
+    private bool IsImageUploadProcessStarted { get; set; } = false;
 
     private string Title { get; set; } = "افزودن";
 
@@ -90,7 +97,7 @@
             // Update
             Title = "ویرایش";
             HotelRoomModel = await HotelRoomRepository.GetHotelRoom(Id.Value);
-            if (HotelRoomModel.Images is {Count: > 0 })
+            if (HotelRoomModel.Images is { Count: > 0 })
             {
                 HotelRoomModel.ImageUrls = HotelRoomModel.Images.Select(a => a.RoomImageUrl).ToList();
             }
@@ -119,8 +126,20 @@
                 // Update
                 var updateRoomResult = await HotelRoomRepository.UpdateHotelRoom(HotelRoomModel.Id, HotelRoomModel);
 
-                if (HotelRoomModel.ImageUrls is {Count: > 0})
+                if (HotelRoomModel.ImageUrls is { Count: > 0 })
                 {
+                    if (DeletedImageNames != null && DeletedImageNames.Any())
+                    {
+                        foreach (var deletedImageName in DeletedImageNames)
+                        {
+                            var imageName = deletedImageName.Replace($"roomImages/", "");
+
+                            FileUploadService.DeleteFile(imageName);
+
+                            await HotelImagesRepository.DeleteHotelRoomImageByImageUrl(deletedImageName);
+                        }
+                    }
+
                     await AddHotelRoomImage(updateRoomResult);
                 }
 
@@ -147,14 +166,14 @@
     private async Task AddHotelRoomImage(HotelRoomDto roomDetails)
     {
         foreach (var imageUrl in HotelRoomModel.ImageUrls
-            .Where(imageUrl => HotelRoomModel.Images == null || 
+            .Where(imageUrl => HotelRoomModel.Images == null ||
                                HotelRoomModel.Images.Count(a => a.RoomImageUrl == imageUrl) == 0))
         {
             RoomImage = new HotelRoomImageDto
-            {
-                RoomId = roomDetails.Id,
-                RoomImageUrl = imageUrl
-            };
+                {
+                    RoomId = roomDetails.Id,
+                    RoomImageUrl = imageUrl
+                };
 
             await HotelImagesRepository.CreateHotelRoomImage(RoomImage);
         }
@@ -162,6 +181,8 @@
 
     private async Task HandleImageUpload(InputFileChangeEventArgs e)
     {
+        IsImageUploadProcessStarted = true;
+
         try
         {
             var images = new List<string>();
@@ -177,6 +198,7 @@
                         fileInfo.Extension.ToLower() == ".png")
                     {
                         var uploadedImagePath = await FileUploadService.UploadFileAsync(file);
+
                         images.Add(uploadedImagePath);
                     }
                     else
@@ -209,6 +231,10 @@
         {
             await JsRuntime.ToastrError(ex.Message);
         }
+        finally
+        {
+            IsImageUploadProcessStarted = false;
+        }
     }
 
     private async Task DeletePhoto(string imageUrl)
@@ -222,6 +248,12 @@
             {
                 // Create
                 var result = FileUploadService.DeleteFile(imageName);
+            }
+            else
+            {
+                // Update
+                DeletedImageNames ??= new List<string>();
+                DeletedImageNames.Add(imageUrl);
             }
             HotelRoomModel.ImageUrls.RemoveAt(imageIndex);
         }
