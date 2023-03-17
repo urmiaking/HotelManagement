@@ -33,7 +33,37 @@
                     </div>
                     <div class="form-group">
                         <label>جزئیات</label>
-                        <InputTextArea @bind-Value="HotelRoomModel.Details" class="form-control" />
+                        <BlazoredTextEditor @ref="@TextEditor" Placeholder="جزییات اتاق را وارد کنید">
+                            <ToolbarContent>
+                                <select class="ql-header">
+                                    <option selected=""></option>
+                                    <option value="1"></option>
+                                    <option value="2"></option>
+                                    <option value="3"></option>
+                                    <option value="4"></option>
+                                    <option value="5"></option>
+                                </select>
+                                <span class="ql-formats">
+                                    <button class="ql-bold"></button>
+                                    <button class="ql-italic"></button>
+                                    <button class="ql-underline"></button>
+                                    <button class="ql-strike"></button>
+                                </span>
+                                <span class="ql-formats">
+                                    <select class="ql-color"></select>
+                                    <select class="ql-background"></select>
+                                </span>
+                                <span class="ql-formats">
+                                    <button class="ql-list" value="ordered"></button>
+                                    <button class="ql-list" value="bullet"></button>
+                                </span>
+                                <span class="ql-formats">
+                                    <button class="ql-link"></button>
+                                </span>
+                            </ToolbarContent>
+                            <EditorContent></EditorContent>
+                        </BlazoredTextEditor>
+                        @*<InputTextArea @bind-Value="HotelRoomModel.Details" class="form-control" />*@
                     </div>
                     <div class="form-group">
                         <label>زیربنا</label>
@@ -83,6 +113,8 @@
     [Parameter]
     public int? Id { get; set; }
 
+    public BlazoredTextEditor TextEditor { get; set; } = new BlazoredTextEditor();
+
     private HotelRoomDto HotelRoomModel { get; set; } = new();
     private HotelRoomImageDto RoomImage { get; set; } = new();
     private List<string> DeletedImageNames { get; set; } = default!;
@@ -109,6 +141,31 @@
         }
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        var loading = true;
+
+        while (loading)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(HotelRoomModel.Details))
+                {
+                    await TextEditor.LoadHTMLContent(HotelRoomModel.Details);
+                }
+                loading = false;
+            }
+            catch
+            {
+                await Task.Delay(10);
+                loading = true;
+            }
+        }
+    }
+
     private async Task HandleHotelRoomUpsert()
     {
         try
@@ -123,6 +180,7 @@
 
             if (HotelRoomModel.Id != 0)
             {
+                HotelRoomModel.Details = await TextEditor.GetHTML();
                 // Update
                 var updateRoomResult = await HotelRoomRepository.UpdateHotelRoom(HotelRoomModel.Id, HotelRoomModel);
 
