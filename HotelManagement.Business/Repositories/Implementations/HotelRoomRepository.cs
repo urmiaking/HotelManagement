@@ -42,7 +42,7 @@ public class HotelRoomRepository : IHotelRoomRepository
 
             if (roomDetails != null)
             {
-                var room = _mapper.Map<HotelRoomDto, HotelRoom>(hotelRoomDto, roomDetails);
+                var room = _mapper.Map(hotelRoomDto, roomDetails);
                 room.UpdateDate = DateTime.Now;
 
                 var updatedRoom = _db.HotelRooms.Update(room);
@@ -58,7 +58,6 @@ public class HotelRoomRepository : IHotelRoomRepository
         {
             return null;
         }
-        
     }
 
     public async Task<HotelRoomDto> GetHotelRoom(int roomId)
@@ -114,14 +113,14 @@ public class HotelRoomRepository : IHotelRoomRepository
             if (roomId == 0)
             {
                 var hotelRoom = await _db.HotelRooms.FirstOrDefaultAsync(a =>
-                    string.Equals(a.Name, name, StringComparison.CurrentCultureIgnoreCase));
+                    a.Name == name);
 
                 return _mapper.Map<HotelRoom, HotelRoomDto>(hotelRoom!);
             }
             else
             {
                 var hotelRoom = await _db.HotelRooms.FirstOrDefaultAsync(a =>
-                    string.Equals(a.Name, name, StringComparison.CurrentCultureIgnoreCase) && a.Id != roomId);
+                    a.Name == name && a.Id != roomId);
 
                 return _mapper.Map<HotelRoom, HotelRoomDto>(hotelRoom!);
             }

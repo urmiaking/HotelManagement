@@ -9,7 +9,7 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<HotelRoomDto, HotelRoom>().ReverseMap();
-
         CreateMap<HotelRoomImage, HotelRoomImageDto>().ReverseMap();
+        CreateMap<HotelAmenity, HotelAmenityDto>().ReverseMap();
     }
 }

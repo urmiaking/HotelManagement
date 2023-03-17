@@ -1,0 +1,83 @@
+﻿@page "/hotel-ameniy"
+@inject IJSRuntime JsRuntime
+@inject IHotelAmenityRepository HotelAmenityRepository
+
+<div class="row mt-4">
+    <div class="col-7">
+        <h4 class="card-title text-info">لیست امکانات</h4>
+    </div>
+    <div class="col-3 offset-1">
+        <NavLink href="hotel-amenity/create" class="btn btn-info form-control">افزودن امکانات جدید</NavLink>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>نام</th>
+                    <th>زمان بندی</th>
+                    <th>نماد</th>
+                    <th>عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (HotelAmenities.Any())
+                {
+                    foreach (var hotelAmenity in HotelAmenities)
+                    {
+                        <tr>
+                            <td>@hotelAmenity.Name</td>
+                            <td>@hotelAmenity.Timing</td>
+                            <td><i class="@hotelAmenity.Icon"></i></td>
+                            <td>
+                                <NavLink href="@($"hotel-amenity/edit/{hotelAmenity.Id}")" class="btn btn-info">ویرایش</NavLink>
+                                <button class="btn btn-danger" @onclick="() => HandleDelete(hotelAmenity.Id)">حذف</button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">هیچ اتاقی یافت نشد</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<DeleteConfirmation ConfirmationChanged="ConfirmDelete_Click" IsParentComponentProcessing="IsProcessing"></DeleteConfirmation>
+
+@code {
+    private IEnumerable<HotelAmenityDto> HotelAmenities { get; set; } = new List<HotelAmenityDto>();
+    private int? DeleteAmenityId { get; set; } = null;
+    public bool IsProcessing { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        HotelAmenities = await HotelAmenityRepository.GetAllHotelAmenities();
+    }
+
+    public async Task ConfirmDelete_Click(bool isConfirmed)
+    {
+        IsProcessing = true;
+        if (isConfirmed && DeleteAmenityId != null)
+        {
+            await HotelAmenityRepository.DeleteHotelAmenity(DeleteAmenityId.Value);
+            await JsRuntime.ToastrSuccess("امکانات با موفقیت حذف شد");
+            HotelAmenities = await HotelAmenityRepository.GetAllHotelAmenities();
+        }
+
+        await JsRuntime.InvokeVoidAsync("HideDeleteConfirmationModal");
+        IsProcessing = false;
+    }
+
+    public async Task HandleDelete(int amenityId)
+    {
+        DeleteAmenityId = amenityId;
+        await JsRuntime.InvokeVoidAsync("ShowDeleteConfirmationModal");
+    }
+}
