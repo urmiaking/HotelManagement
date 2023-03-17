@@ -79,6 +79,7 @@
 
     private HotelRoomDto HotelRoomModel { get; set; } = new();
     private HotelRoomImageDto RoomImage { get; set; } = new();
+    private List<string> DeleteImageNames { get; set; } = default!;
 
     private string Title { get; set; } = "افزودن";
 
@@ -206,8 +207,7 @@
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
-            throw;
+            await JsRuntime.ToastrError(ex.Message);
         }
     }
 
