@@ -5,10 +5,12 @@ namespace HotelManagement.Server.Services;
 public class FileUploadService : IFileUploadService
 {
     private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public FileUploadService(IWebHostEnvironment webHostEnvironment)
+    public FileUploadService(IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
     {
         _webHostEnvironment = webHostEnvironment;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<string> UploadFileAsync(IBrowserFile file)
@@ -36,7 +38,9 @@ public class FileUploadService : IFileUploadService
                 }
             }
 
-            var fullPath = $"roomImages/{fileName}";
+            var url =
+                $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host.Value}";
+            var fullPath = $"{url}/roomImages/{fileName}";
             return fullPath;
         }
         catch
