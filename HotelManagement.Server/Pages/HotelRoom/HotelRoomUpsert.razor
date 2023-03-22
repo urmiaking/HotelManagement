@@ -7,7 +7,7 @@
 @inject IJSRuntime JsRuntime
 @inject IFileUploadService FileUploadService
 @inject IHotelImagesRepository HotelImagesRepository
-@attribute [Authorize]
+@*@attribute [Authorize]*@
 
 <div class="row mt-2 mb-5">
     <h3 class="card-title text-info m-3">@Title اتاق</h3>
@@ -118,13 +118,24 @@
 
     private HotelRoomDto HotelRoomModel { get; set; } = new();
     private HotelRoomImageDto RoomImage { get; set; } = new();
-    private List<string> DeletedImageNames { get; set; } = default!;
+    private List<string> DeletedImageNames { get; set; }
     private bool IsImageUploadProcessStarted { get; set; } = false;
 
     private string Title { get; set; } = "افزودن";
 
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationState { get; set; } = default!;
+
     protected override async Task OnInitializedAsync()
     {
+        var authenticationState = await AuthenticationState;
+
+        if (!authenticationState.User.Identity!.IsAuthenticated)
+        {
+            var uri = new Uri(NavigationManager.Uri);
+            NavigationManager.NavigateTo($"/Identity/Account/Login?returnUrl={uri.LocalPath}");
+        }
+
         if (Id is not null)
         {
             // Update
