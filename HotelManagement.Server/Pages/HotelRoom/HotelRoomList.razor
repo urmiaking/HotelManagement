@@ -1,11 +1,10 @@
 ﻿@page "/hotel-room"
-@using HotelManagement.Server.Services
 
 @inject IHotelRoomRepository HotelRoomRepository
 @inject IJSRuntime JsRuntime
 @inject IFileUploadService FileService
 @inject NavigationManager NavigationManager
-@attribute [Authorize]
+@attribute [Authorize(Roles = StaticVariables.RoleAdmin)]
 
 <div class="row mt-4">
     <div class="col-7">

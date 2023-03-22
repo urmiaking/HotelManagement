@@ -1,7 +1,7 @@
 ﻿@page "/hotel-amenity"
 @inject IJSRuntime JsRuntime
 @inject IHotelAmenityRepository HotelAmenityRepository
-@attribute [Authorize]
+@attribute [Authorize(Roles = StaticVariables.RoleAdmin)]
 
 <div class="row mt-4">
     <div class="col-7">

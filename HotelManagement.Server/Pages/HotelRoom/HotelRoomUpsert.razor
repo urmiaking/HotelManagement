@@ -130,7 +130,7 @@
     {
         var authenticationState = await AuthenticationState;
 
-        if (!authenticationState.User.Identity!.IsAuthenticated)
+        if (!authenticationState.User.IsInRole(StaticVariables.RoleAdmin))
         {
             var uri = new Uri(NavigationManager.Uri);
             NavigationManager.NavigateTo($"/Identity/Account/Login?returnUrl={uri.LocalPath}");

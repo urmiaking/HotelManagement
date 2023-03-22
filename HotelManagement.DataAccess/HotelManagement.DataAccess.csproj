@@ -19,4 +19,8 @@
     <Folder Include="Models\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HotelManagement.Common\HotelManagement.Common.csproj" />
+  </ItemGroup>
+
 </Project>
