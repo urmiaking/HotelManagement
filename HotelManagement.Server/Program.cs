@@ -4,7 +4,6 @@ using HotelManagement.DataAccess.Data;
 using HotelManagement.Server.Data;
 using HotelManagement.Server.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
