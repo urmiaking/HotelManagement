@@ -1,12 +1,12 @@
 ﻿namespace HotelManagement.Models.DTOs;
 
-public class RegistrationResponseDto
+public class ResponseDto
 {
-    public RegistrationResponseDto()
+    public ResponseDto()
     {
         Errors = new Dictionary<string, string[]>();
     }
 
-    public bool IsRegistrationSuccessful { get; set; }
+    public bool Succeed { get; set; }
     public IDictionary<string, string[]> Errors { get; set; }
 }

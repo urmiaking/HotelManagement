@@ -1,6 +1,8 @@
 ﻿using HotelManagement.Business.Repositories.Interfaces;
+using HotelManagement.Common;
 using HotelManagement.DataAccess.Models;
 using HotelManagement.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace HotelManagement.Api.Endpoints;
@@ -11,7 +13,8 @@ public static class HotelRoomEndpoints
     {
         var group = routes.MapGroup("/api").WithTags(nameof(HotelRoom));
 
-        group.MapGet("/hotelrooms", async (IHotelRoomRepository repository) => await repository.GetAllHotelRooms())
+        group.MapGet("/hotelrooms", [Authorize(Roles = StaticVariables.RoleAdmin)] 
+                async (IHotelRoomRepository repository) => await repository.GetAllHotelRooms())
             .WithName("GetHotelRooms")
             .WithOpenApi();
 
