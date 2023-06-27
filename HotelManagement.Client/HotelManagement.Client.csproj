@@ -13,11 +13,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Services\Abstracts\" />
+    <Folder Include="Services\Implementations\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\HotelManagement.Common\HotelManagement.Common.csproj" />
+    <ProjectReference Include="..\HotelManagement.Models\HotelManagement.Models.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using HotelManagement.Models.DTOs;
 
-namespace HotelManagement.Models.Validations;
+namespace HotelManagement.Business.Validations;
 
 public class AuthenticationDtoValidator : AbstractValidator<AuthenticationDto>
 {

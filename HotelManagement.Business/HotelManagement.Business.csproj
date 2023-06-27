@@ -1,24 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Mapper\" />
-    <Folder Include="Repositories\Interfaces\" />
-    <Folder Include="Repositories\Implementations\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Mapper\" />
+		<Folder Include="Repositories\Interfaces\" />
+		<Folder Include="Repositories\Implementations\" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="12.0.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="12.0.1" />
+		<PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\HotelManagement.DataAccess\HotelManagement.DataAccess.csproj" />
-    <ProjectReference Include="..\HotelManagement.Models\HotelManagement.Models.csproj" />
-  </ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\HotelManagement.DataAccess\HotelManagement.DataAccess.csproj" />
+		<ProjectReference Include="..\HotelManagement.Models\HotelManagement.Models.csproj" />
+	</ItemGroup>
 
 </Project>
