@@ -1,6 +1,7 @@
 ﻿@page "/"
-@using HotelManagement.Client.Models.ViewModels
-
+@inject ILocalStorageService LocalStorage
+@inject IJSRuntime JsRuntime
+@inject NavigationManager NavigationManager
 
 <div class="row p-0 m-0">
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
@@ -26,7 +27,7 @@
         </a>
     </div>
 </div>
-<EditForm Model="HomeModel">
+<EditForm Model="HomeModel" OnValidSubmit="SaveInitialData">
     <div class="row p-0 mx-0 mt-4">
 
         <div class="col-12 col-md-5  offset-md-1 px-2  px-2 px-md-0">
@@ -64,4 +65,19 @@
 @code
 {
     public HomeVm HomeModel { get; set; } = new ();
+
+    private async Task SaveInitialData()
+    {
+        try
+        {
+            HomeModel.EndDate = HomeModel.StartDate.AddDays(HomeModel.NumberOfNights);
+            await LocalStorage.SetItemAsync(StaticVariables.LocalInitialBooking, HomeModel);
+
+            NavigationManager.NavigateTo("/hotel/rooms", forceLoad: true);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.ToastrError(e.Message);
+        }
+    }
 }

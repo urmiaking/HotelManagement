@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelManagement.Business", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelManagement.Models", "HotelManagement.Models\HotelManagement.Models.csproj", "{4E6AFE88-4E08-4D2C-97DB-6ED64B60625E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelManagement.Api", "HotelManagement.Api\HotelManagement.Api.csproj", "{AB77B29C-7A71-43D0-9F97-2D1C61A47C11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelManagement.Api", "HotelManagement.Api\HotelManagement.Api.csproj", "{AB77B29C-7A71-43D0-9F97-2D1C61A47C11}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
