@@ -93,7 +93,7 @@ public class HotelRoomRepository : IHotelRoomRepository
         return 0;
     }
 
-    public async Task<IEnumerable<HotelRoomDto>> GetAllHotelRooms(string? checkInDate, string? checkOutDate)
+    public async Task<IEnumerable<HotelRoomDto>> GetAllHotelRooms(string? checkInDate = null, string? checkOutDate = null)
     {
         try
         {

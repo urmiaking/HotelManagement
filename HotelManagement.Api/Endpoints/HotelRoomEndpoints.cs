@@ -16,8 +16,7 @@ public static class HotelRoomEndpoints
 
         group.MapGet("/hotelrooms", GetAllHotelRooms).WithName("GetHotelRooms").WithOpenApi();
 
-        group.MapGet("/hotelrooms?roomId={roomId}&checkInDate={checkInDate}&checkOutDate={checkOutDate}",
-            GetHotelRoom).WithName("GetHotelRoom").WithOpenApi();
+        group.MapGet("/hotelroom", GetHotelRoom).WithName("GetHotelRoom").WithOpenApi();
     }
 
     private static async Task<IResult> GetHotelRoom(int roomId, string? checkInDate, string? checkOutDate, IHotelRoomRepository repository)

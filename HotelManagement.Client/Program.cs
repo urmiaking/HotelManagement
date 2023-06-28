@@ -13,6 +13,6 @@ builder.Services.AddScoped(sp => new HttpClient
     { BaseAddress = new Uri(builder.Configuration.GetValue<string>("BaseApiUrl")!) });
 
 builder.Services.AddBlazoredLocalStorage();
-builder.Services.AddTransient<IHotelRoomService, HotelRoomService>();
+builder.Services.AddScoped<IHotelRoomService, HotelRoomService>();
 
 await builder.Build().RunAsync();

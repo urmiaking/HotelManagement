@@ -31,7 +31,7 @@ public class HotelRoomService : IHotelRoomService
     {
         try
         {
-            var response = await _httpClient.GetAsync($"/api/hotelrooms?roomId={roomId}&checkInDate={checkInDate}&checkOutDate={checkOutDate}");
+            var response = await _httpClient.GetAsync($"/api/hotelroom?roomId={roomId}&checkInDate={checkInDate}&checkOutDate={checkOutDate}");
             return await response.Content.ReadFromJsonAsync<HotelRoomDto>();
         }
         catch (Exception e)
