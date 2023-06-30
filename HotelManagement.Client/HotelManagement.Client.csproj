@@ -15,6 +15,7 @@
   <ItemGroup>
     <Folder Include="Services\Abstracts\" />
     <Folder Include="Services\Implementations\" />
+    <Folder Include="wwwroot\css\fontawesome\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 

@@ -14,5 +14,6 @@ builder.Services.AddScoped(sp => new HttpClient
 
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<IHotelRoomService, HotelRoomService>();
+builder.Services.AddScoped<IHotelAmenityService, HotelAmenityService>();
 
 await builder.Build().RunAsync();

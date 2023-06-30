@@ -120,6 +120,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapHotelRoomEndpoints();
+app.MapHotelAmenityEndpoints();
 app.MapAccountEndpoints();
 
 app.Run();
