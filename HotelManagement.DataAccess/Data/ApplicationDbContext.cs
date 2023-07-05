@@ -14,4 +14,5 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     public required DbSet<HotelRoomImage> HotelRoomsImage { get; set; }
     public required DbSet<HotelAmenity> HotelAmenities { get; set; }
     public required DbSet<ApplicationUser> ApplicationUser { get; set; }
+    public required DbSet<RoomOrderDetail> RoomOrderDetails { get; set; }
 }

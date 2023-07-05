@@ -11,5 +11,6 @@ public class MappingProfile : Profile
         CreateMap<HotelRoomDto, HotelRoom>().ReverseMap();
         CreateMap<HotelRoomImage, HotelRoomImageDto>().ReverseMap();
         CreateMap<HotelAmenity, HotelAmenityDto>().ReverseMap();
+        CreateMap<RoomOrderDetail, RoomOrderDetailsDto>().ReverseMap();
     }
 }
