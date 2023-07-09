@@ -7,9 +7,9 @@ public class RoomOrderDetailsDto
 {
     public int Id { get; set; }
 
-    [Required] public required string UserId { get; set; }
+    [Required] public string UserId { get; set; } = string.Empty;
 
-    [Required] public required string StripeSessionId { get; set; }
+    [Required] public string StripeSessionId { get; set; } = string.Empty;
 
     [Required] public DateTime CheckInDate { get; set; }
 
@@ -27,11 +27,11 @@ public class RoomOrderDetailsDto
 
     [Required] public string Name { get; set; } = string.Empty;
 
-    [Required] public required string Email { get; set; }
+    [Required] public string Email { get; set; } = string.Empty;
 
     public string Phone { get; set; } = string.Empty;
 
     [ForeignKey(nameof(RoomId))] public HotelRoomDto? HotelRoomDto { get; set; }
 
-    public required string Status { get; set; }
+    public string Status { get; set; } = string.Empty;
 }

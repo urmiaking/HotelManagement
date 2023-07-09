@@ -64,6 +64,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IHotelRoomRepository, HotelRoomRepository>();
 builder.Services.AddScoped<IHotelImagesRepository, HotelImageRepository>();
 builder.Services.AddScoped<IHotelAmenityRepository, HotelAmenityRepository>();
+builder.Services.AddScoped<IRoomOrderDetailsRepository, RoomOrderDetailsRepository>();
 builder.Services.AddScoped<IValidator<UserRequestDto>, UserRequestDtoValidator>();
 builder.Services.AddScoped<IValidator<AuthenticationDto>, AuthenticationDtoValidator>();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);

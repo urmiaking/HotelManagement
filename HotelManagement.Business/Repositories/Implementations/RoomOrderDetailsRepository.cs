@@ -89,8 +89,11 @@ public class RoomOrderDetailsRepository : IRoomOrderDetailsRepository
         throw new NotImplementedException();
     }
 
-    public Task<bool> IsRoomBooked(int roomId, DateTime checkInDate, DateTime checkOutDate)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<bool> IsRoomBooked(int roomId, DateTime checkInDate, DateTime checkOutDate)
+        => await _db.RoomOrderDetails
+            .AnyAsync(a => a.RoomId == roomId && 
+                           a.IsPaymentSuccessful &&
+                           (checkInDate < a.CheckOutDate && checkInDate.Date > a.CheckInDate) || 
+                           (checkOutDate.Date > a.CheckInDate.Date && checkInDate.Date < a.CheckInDate.Date));
+
 }

@@ -1,5 +1,8 @@
 ﻿@page "/hotel/room-details/{Id:int}"
 
+@inject IJSRuntime JsRuntime
+@inject ILocalStorageService LocalStorage
+@inject IHotelRoomService HotelRoomService
 
 <div class="mt-4 mx-4 px-0 px-md-5 mx-md-5">
 
@@ -102,4 +105,63 @@
 {
     [Parameter]
     public int? Id { get; set; }
+
+    public HotelRoomBookingVm HotelRoomBooking { get; set; } = new ();
+    public int NumberOfNights { get; set; } = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if (Id is not null)
+            {
+                var roomInitialInfo = await LocalStorage.GetItemAsync<HomeVm>(StaticVariables.LocalInitialBooking);
+
+                if (roomInitialInfo is not null)
+                {
+                    HotelRoomBooking.OrderDetails = new RoomOrderDetailsDto
+                    {
+                        HotelRoomDto = await HotelRoomService.GetHotelRoomDetails(Id.Value,
+                            roomInitialInfo.StartDate.ToString("MM/dd/yyyy"),
+                            roomInitialInfo.EndDate.ToString("MM/dd/yyyy")),
+                        CheckInDate = roomInitialInfo.StartDate,
+                        CheckOutDate = roomInitialInfo.EndDate
+                    };
+
+                    if (HotelRoomBooking.OrderDetails.HotelRoomDto != null)
+                    {
+                        HotelRoomBooking.OrderDetails.HotelRoomDto.TotalDays = roomInitialInfo.NumberOfNights;
+                        HotelRoomBooking.OrderDetails.HotelRoomDto.TotalAmount = roomInitialInfo.NumberOfNights
+                                                                                 * HotelRoomBooking.OrderDetails.HotelRoomDto.RegularRate;
+                    }
+
+                    NumberOfNights = roomInitialInfo.NumberOfNights;
+                }
+                else
+                {
+                    HotelRoomBooking.OrderDetails = new RoomOrderDetailsDto
+                        {
+                            HotelRoomDto = await HotelRoomService.GetHotelRoomDetails(Id.Value,
+                                    DateTime.Now.ToString("MM/dd/yyyy"),
+                                    DateTime.Now.AddDays(1).ToString("MM/dd/yyyy")),
+                            CheckInDate = DateTime.Now,
+                            CheckOutDate = DateTime.Now.AddDays(1)
+                        };
+
+                    if (HotelRoomBooking.OrderDetails.HotelRoomDto != null)
+                    {
+                        HotelRoomBooking.OrderDetails.HotelRoomDto.TotalDays = 1;
+                        HotelRoomBooking.OrderDetails.HotelRoomDto.TotalAmount = HotelRoomBooking.OrderDetails.HotelRoomDto.RegularRate;
+                    }
+
+                    NumberOfNights = 1;
+                }
+
+            }
+        }
+        catch (Exception ex)
+        {
+            await JsRuntime.ToastrError(ex.Message);
+        }
+    }
 }
